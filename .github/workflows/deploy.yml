@@ -29,11 +29,12 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
 
       - name: Deploy to EC2 K3s
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            kubectl set image deployment/flask-app flask-app=${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-            kubectl rollout status deployment/flask-app
+            sudo kubectl get nodes
+            sudo kubectl set image deployment/flask-app flask-app=${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+            sudo kubectl rollout status deployment/flask-app
